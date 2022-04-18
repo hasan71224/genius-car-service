@@ -5,6 +5,7 @@ import { useCreateUserWithEmailAndPassword, useUpdateProfile } from 'react-fireb
 import auth from '../../../firebase.init';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import { async } from '@firebase/util';
+import { Helmet } from 'react-helmet-async';
 
 const Registration = () => {
     // const [agree, setAgree] = useState(false)
@@ -53,6 +54,9 @@ const Registration = () => {
 
     return (
         <div className="w-50 mx-auto">
+            <Helmet>
+                <title>Register - Genius Car Service</title>
+            </Helmet>
             <h2 className='text-center mt-3 text-primary'>Pleas Register Now </h2>
             <Form onSubmit={handleRegister}>
                 <Form.Group className="mb-3" controlId="formBasicName">
