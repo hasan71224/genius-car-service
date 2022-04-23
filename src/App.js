@@ -1,11 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
 import './App.css';
 import About from './Pages/About/About';
+import AddService from './Pages/AddService/AddService';
 import CheckOut from './Pages/CheckOut/CheckOut/CheckOut';
 import Home from './Pages/Home/Home/Home';
 import Login from './Pages/Login/Login/Login';
 import Registration from './Pages/Login/Registration/Registration';
 import RequireAuth from './Pages/Login/RequireAuth/RequireAuth';
+import ManageServices from './Pages/ManageServices/ManageServices';
 import NotFound from './Pages/NotFound/NotFound';
 import ServiceDetails from './Pages/ServiceDetails/ServiceDetails';
 import Footer from './Pages/Shared/Footer/Footer';
@@ -16,11 +18,7 @@ function App() {
     <div>
       <Header></Header>
       <Routes>
-        <Route path='/' element={
-          <RequireAuth>
-            <Home></Home>
-          </RequireAuth>
-        }></Route>
+        <Route path='/' element={<Home></Home>}></Route>
         <Route path='/home' element={
           <RequireAuth>
             <Home></Home>
@@ -35,6 +33,18 @@ function App() {
             <CheckOut></CheckOut>
           </RequireAuth>
         }></Route>
+
+        <Route path='/addservice' element={
+          <RequireAuth>
+            <AddService></AddService>
+          </RequireAuth>
+        }></Route>
+        <Route path='/manageservice' element={
+          <RequireAuth>
+            <ManageServices></ManageServices>
+          </RequireAuth>
+        }></Route>
+
         <Route path='*' element={<NotFound></NotFound>}></Route>
       </Routes>
       <Footer></Footer>
