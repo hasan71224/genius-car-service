@@ -6,6 +6,7 @@ import auth from '../../../firebase.init';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import { async } from '@firebase/util';
 import { Helmet } from 'react-helmet-async';
+import useToken from '../../../hook/useToken';
 
 const Registration = () => {
     // const [agree, setAgree] = useState(false)
@@ -17,22 +18,28 @@ const Registration = () => {
         error,
     ] = useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
     const [updateProfile, updating, updateError] = useUpdateProfile(auth);
-
+    const [token] = useToken(user);
 
     // const nameRef = useRef(" ")
     // const emailRef = useRef(" ")
     // const passwordRef = useRef (" ")
     const navigate = useNavigate();
 
-    if (user) {
-        // navigate('/home')
-        console.log('user:', user);
-    }
-
+    let loadingElement;
 
     const navigateLogin = event => {
         navigate('/login')
     }
+
+    if(loading || updating){
+       loadingElement = <div> <p>Loading...</p> </div>
+    }
+
+    if (token) {
+        navigate('/home')
+        // console.log('user:', user);
+    }
+
 
     const handleRegister = async (event) => {
         event.preventDefault();
@@ -48,7 +55,7 @@ const Registration = () => {
             await createUserWithEmailAndPassword(email, password)
             await updateProfile({ displayName: name });
             alert('Updated profile');
-            navigate('/home')
+            // navigate('/home')
         }
     }
 
@@ -85,8 +92,10 @@ const Registration = () => {
                     Register
                 </Button>
             </Form>
+            {loadingElement}
             <p className='mt-3'>Already Have an Account? <span className='text-danger' style={{ cursor: "pointer" }} onClick={navigateLogin}>please Login</span> </p>
             <SocialLogin></SocialLogin>
+            
         </div>
     );
 };

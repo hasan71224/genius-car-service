@@ -5,10 +5,12 @@ import social1 from '../../../images/social/social1.png'
 import { useSignInWithGoogle, useSignInWithGithub } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useToken from '../../../hook/useToken';
 
 const SocialLogin = () => {
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
     const [signInWithGithub, user1, loading1, error1] = useSignInWithGithub(auth);
+    const [token] = useToken(user || user1)
     const navigate = useNavigate();
     let errorElement;
     let loadingElement;
@@ -23,7 +25,7 @@ const SocialLogin = () => {
         loadingElement = <div> <p>Loading...</p> </div>
       }
 
-    if (user || user1) {
+    if (token) {
         navigate(from, { replace: true });
     }
     return (

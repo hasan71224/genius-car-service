@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
+import useToken from '../../../hook/useToken';
 
 const Login = () => {
     const emailRef = useRef(" ")
@@ -16,6 +17,7 @@ const Login = () => {
     const navigate = useNavigate()
     const location = useLocation();
     let from = location.state?.from?.pathname || "/";
+    
 
     const [
         signInWithEmailAndPassword,
@@ -25,10 +27,16 @@ const Login = () => {
     ] = useSignInWithEmailAndPassword(auth);
 
     const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
+    const [token] = useToken(user);
+
+    let loadingElement;
+    if(loading || sending){
+       loadingElement = <div> <p>Loading...</p> </div>
+    }
 
     // console.log(user);
-    if (user) {
-        // navigate(from, { replace: true });
+    if(token) {
+        navigate(from, { replace: true });
     }
     //   else{
     //       navigate('/registration')
@@ -37,10 +45,13 @@ const Login = () => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
+
         await signInWithEmailAndPassword(email, password);
-        const {data} = await axios.post('http://localhost:5000/login', {email});
-        localStorage.setItem('accessToken', data.accessToken)
-        navigate(from, { replace: true });
+
+        // const {data} = await axios.post('https://radiant-fortress-18374.herokuapp.com/login', {email});
+        // localStorage.setItem('accessToken', data.accessToken)
+
+        // navigate(from, { replace: true });
     }
     let errorElement;
     if (error) {
@@ -91,6 +102,7 @@ const Login = () => {
                 </Button>
             </Form>
             {errorElement}
+            {loadingElement}
             <p className='mt-3'>New To Genius Car? <span className='text-danger' style={{ cursor: "pointer" }} onClick={navigateRegister}>Register</span> </p>
 
             <p className='mt-3'>Forget Password? <span className='text-primary' style={{ cursor: "pointer" }} onClick={resetPassword}>Reset Password</span></p>
