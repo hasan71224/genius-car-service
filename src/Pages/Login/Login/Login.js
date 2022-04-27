@@ -5,9 +5,10 @@ import { useSignInWithEmailAndPassword, useSendPasswordResetEmail } from 'react-
 import auth from '../../../firebase.init';
 import SocialLogin from '../SocialLogin/SocialLogin';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Helmet } from 'react-helmet-async';
+import axios from 'axios';
 
 const Login = () => {
     const emailRef = useRef(" ")
@@ -25,18 +26,21 @@ const Login = () => {
 
     const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
 
-    console.log(user);
+    // console.log(user);
     if (user) {
-        navigate(from, { replace: true });
+        // navigate(from, { replace: true });
     }
     //   else{
     //       navigate('/registration')
     //   }
-    const handleSubmit = event => {
+    const handleSubmit = async event => {
         event.preventDefault();
         const email = emailRef.current.value;
         const password = passwordRef.current.value;
-        signInWithEmailAndPassword(email, password);
+        await signInWithEmailAndPassword(email, password);
+        const {data} = await axios.post('http://localhost:5000/login', {email});
+        localStorage.setItem('accessToken', data.accessToken)
+        navigate(from, { replace: true });
     }
     let errorElement;
     if (error) {
@@ -91,7 +95,6 @@ const Login = () => {
 
             <p className='mt-3'>Forget Password? <span className='text-primary' style={{ cursor: "pointer" }} onClick={resetPassword}>Reset Password</span></p>
             <SocialLogin></SocialLogin>
-            <ToastContainer />
         </div>
     );
 };

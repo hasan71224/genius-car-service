@@ -4,7 +4,7 @@ import social3 from '../../../images/social/social3.png'
 import social1 from '../../../images/social/social1.png'
 import { useSignInWithGoogle, useSignInWithGithub } from 'react-firebase-hooks/auth';
 import auth from '../../../firebase.init';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const SocialLogin = () => {
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
@@ -13,6 +13,9 @@ const SocialLogin = () => {
     let errorElement;
     let loadingElement;
     
+    const location = useLocation();
+    let from = location.state?.from?.pathname || "/";
+
     if (error || error1) {
         errorElement = <div> <p className='text-danger'>Error: {error?.message} {error1?.message}</p> </div>
     }
@@ -21,7 +24,7 @@ const SocialLogin = () => {
       }
 
     if (user || user1) {
-        navigate("/home")
+        navigate(from, { replace: true });
     }
     return (
         <div>
